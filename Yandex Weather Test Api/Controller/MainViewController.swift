@@ -52,7 +52,7 @@ class MainViewController: UIViewController, DataUpdateProtocol {
         super.viewDidLoad()
         
         title = "Yandex Weather"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         addNotificationCenter()
         

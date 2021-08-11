@@ -17,7 +17,7 @@ class DetailViewController: UIViewController {
     
     var isContain = false
     
-    let network = Network()
+    private let network = Network()
     
     private lazy var cityLabel: UILabel = {
         let label = UILabel()
@@ -90,7 +90,7 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         title = "Yandex Weather"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         if !isContain {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addSelectedCity))

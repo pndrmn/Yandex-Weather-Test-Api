@@ -70,12 +70,12 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A41B85FF26C283D2000A9A6D /* Helpers */ = {
+		A41B85FF26C283D2000A9A6D /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
 				A41B862526C3C3D9000A9A6D /* DataUpdateProtocol.swift */,
 			);
-			path = Helpers;
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 		A428D95D26C00BCA00B49DEB /* Extension */ = {
@@ -112,8 +112,8 @@
 				A4B10F6926BFB69F009F5342 /* Application */,
 				A4B10F6C26BFB748009F5342 /* Controller */,
 				A428D95D26C00BCA00B49DEB /* Extension */,
-				A41B85FF26C283D2000A9A6D /* Helpers */,
 				A4B10F7126BFB7B5009F5342 /* Model */,
+				A41B85FF26C283D2000A9A6D /* Protocol */,
 				A4B10F7226BFB7E5009F5342 /* View */,
 			);
 			path = "Yandex Weather Test Api";
