@@ -16,7 +16,6 @@ class MainViewController: UIViewController, DataUpdateProtocol {
     var citiesArray = Cities().arrayOfCities
     var weatherArray = [CurrentCityWeather]()
     var filteredWeatherArray = [CurrentCityWeather]()
-    var cityTextField: String!
     var updatedData: CurrentCityWeather!
     
     var searchBarIsEmpty: Bool {
@@ -31,7 +30,7 @@ class MainViewController: UIViewController, DataUpdateProtocol {
         return searchController.isActive && !searchBarIsEmpty
     }
     
-    private lazy var searchController: UISearchController = {
+    lazy var searchController: UISearchController = {
         
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.delegate = self
@@ -54,8 +53,6 @@ class MainViewController: UIViewController, DataUpdateProtocol {
         
         title = "Yandex Weather"
         view.backgroundColor = .white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCity))
-        
         
         addNotificationCenter()
         
@@ -126,43 +123,6 @@ class MainViewController: UIViewController, DataUpdateProtocol {
         }
     }
     
-    @objc func addCity() {
-        
-        let ac = UIAlertController(title: "Add city", message: nil, preferredStyle: .alert)
-        
-        ac.addTextField { textField in
-            textField.placeholder = "City"
-        }
-        
-        let okButton = UIAlertAction(title: "OK", style: .default) { [weak self]_ in
-            
-            guard let cityText = ac.textFields?[0].text?.firstUppercased else {
-                return
-            }
-            self?.cityTextField = cityText
-            
-            self?.network.getCoordinatesOf(city: cityText) { coordinate, error in
-                
-                if let coordinate = coordinate, error == nil {
-                    
-                    self?.network.getDataWeather(lat: coordinate.latitude, lon: coordinate.longitude) { weather in
-                        
-                        self?.showDetailViewController(weather: weather, city: cityText)
-                    }
-                } else {
-                    self?.showAC()
-                }
-            }
-        }
-        
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        ac.addAction(cancelButton)
-        ac.addAction(okButton)
-        
-        self.present(ac, animated: true, completion: nil)
-    }
-    
     private func addNotificationCenter() {
         
         let notificationCenter = NotificationCenter.default
@@ -186,7 +146,7 @@ class MainViewController: UIViewController, DataUpdateProtocol {
         tableView.scrollIndicatorInsets = tableView.contentInset
     }
     
-    private func showAC() {
+    func showAC() {
         
         let ac = UIAlertController(title: "City not found", message: nil, preferredStyle: .alert)
         let okButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
@@ -203,7 +163,7 @@ class MainViewController: UIViewController, DataUpdateProtocol {
         navigationItem.hidesSearchBarWhenScrolling = true
     }
     
-    private func showDetailViewController(weather: CurrentCityWeather, city: String!) -> Void {
+    func showDetailViewController(weather: CurrentCityWeather, city: String!) -> Void {
         
         DispatchQueue.main.async {
             

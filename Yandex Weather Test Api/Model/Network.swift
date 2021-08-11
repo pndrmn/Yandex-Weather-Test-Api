@@ -6,7 +6,7 @@
 //
 
 import CoreLocation
-import Foundation
+import UIKit
 
 struct Network {
     
@@ -72,6 +72,15 @@ struct Network {
                     completionHandler(index, weather)
                 }
             }
+        }
+    }
+    
+    func showSVG(view: UIImageView, weather: CurrentCityWeather) {
+        
+        if let svgURL = URL(string: "https://yastatic.net/weather/i/icons/funky/dark/\(weather.icon).svg") {
+            
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.downloadedsvg(from: svgURL)
         }
     }
 }

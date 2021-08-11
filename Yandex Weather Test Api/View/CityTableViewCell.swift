@@ -10,8 +10,9 @@ import UIKit
 class CityTableViewCell: UITableViewCell {
     
     let cityLabel = UILabel()
-    let weatherLabel = UILabel()
+    let weatherImageView = UIImageView()
     let temperatureLabel = UILabel()
+    let network = Network()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -29,21 +30,21 @@ class CityTableViewCell: UITableViewCell {
     private func disableTranslatesAutoresizingMaskIntoConstraints() {
         
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
-        weatherLabel.translatesAutoresizingMaskIntoConstraints = false
+        weatherImageView.translatesAutoresizingMaskIntoConstraints = false
         temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func configureTextAlignment() {
         
         cityLabel.textAlignment = .left
-        weatherLabel.textAlignment = .right
+//        weatherLabel.textAlignment = .right
         temperatureLabel.textAlignment = .right
     }
     
     private func addSubviews() {
         
         contentView.addSubview(cityLabel)
-        contentView.addSubview(weatherLabel)
+        contentView.addSubview(weatherImageView)
         contentView.addSubview(temperatureLabel)
     }
     
@@ -56,10 +57,10 @@ class CityTableViewCell: UITableViewCell {
             cityLabel.widthAnchor.constraint(equalToConstant: 250),
             cityLabel.heightAnchor.constraint(equalToConstant: 40),
             
-            weatherLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            weatherLabel.leadingAnchor.constraint(equalTo: self.cityLabel.trailingAnchor, constant: 10),
-            weatherLabel.trailingAnchor.constraint(equalTo: temperatureLabel.leadingAnchor, constant: -10),
-            weatherLabel.heightAnchor.constraint(equalToConstant: 40),
+            weatherImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            weatherImageView.leadingAnchor.constraint(equalTo: self.cityLabel.trailingAnchor, constant: 10),
+            weatherImageView.trailingAnchor.constraint(equalTo: temperatureLabel.leadingAnchor, constant: -10),
+            weatherImageView.heightAnchor.constraint(equalToConstant: 40),
             
             temperatureLabel.widthAnchor.constraint(equalToConstant: 60),
             temperatureLabel.heightAnchor.constraint(equalToConstant: 40),
@@ -74,7 +75,9 @@ class CityTableViewCell: UITableViewCell {
             cityLabel.text = "Loading"
         } else {
             cityLabel.text = weather.city
-            weatherLabel.text = weather.conditionEmoji
+            
+            network.showSVG(view: weatherImageView, weather: weather)
+            
             temperatureLabel.text = "\(String(weather.temp))℃"
         }
     }

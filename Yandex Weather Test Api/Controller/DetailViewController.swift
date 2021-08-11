@@ -5,6 +5,7 @@
 //  Created by Roman Gorodilov on 08.08.2021.
 //
 
+import SVGKit
 import UIKit
 
 class DetailViewController: UIViewController {
@@ -15,6 +16,8 @@ class DetailViewController: UIViewController {
     var handleUpdatedDataDelegate: DataUpdateProtocol?
     
     var isContain = false
+    
+    let network = Network()
     
     private lazy var cityLabel: UILabel = {
         let label = UILabel()
@@ -35,13 +38,11 @@ class DetailViewController: UIViewController {
         return label
     }()
     
-    private lazy var conditionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "\(currentWeather.conditionEmoji)"
-        label.font = UIFont.systemFont(ofSize: 200)
-        label.textAlignment = .center
-        return label
+    private lazy var conditionImageView: UIImageView = {
+        
+        let imageView = UIImageView()
+        network.showSVG(view: imageView, weather: currentWeather)
+        return imageView
     }()
     
     private lazy var minTempLabel: UILabel = {
@@ -76,6 +77,14 @@ class DetailViewController: UIViewController {
         return label
     }()
     
+    private lazy var condition: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Weather conditions: \(currentWeather.condition.replacingOccurrences(of: "-", with: " ").firstUppercased)"
+        label.font = UIFont.systemFont(ofSize: 20)
+        return label
+    }()
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +102,7 @@ class DetailViewController: UIViewController {
     
     //MARK: - Functions
     private func addSubviews() {
-        [cityLabel, conditionLabel, tempLabel, minTempLabel, maxTempLabel, windLabel, pressureLabel].forEach {view.addSubview($0)}
+        [cityLabel, conditionImageView, tempLabel, minTempLabel, maxTempLabel, windLabel, pressureLabel, condition].forEach {view.addSubview($0)}
     }
     
     private func addConstraintsToSubviews() {
@@ -105,13 +114,13 @@ class DetailViewController: UIViewController {
             cityLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
             cityLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
             
-            conditionLabel.topAnchor.constraint(equalTo: cityLabel.bottomAnchor),
-            conditionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            conditionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-            conditionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-            conditionLabel.heightAnchor.constraint(equalTo: conditionLabel.widthAnchor, multiplier: 2/3),
+            conditionImageView.topAnchor.constraint(equalTo: cityLabel.bottomAnchor, constant: 35),
+            conditionImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            conditionImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 100),
+            conditionImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -100),
+            conditionImageView.heightAnchor.constraint(equalTo: conditionImageView.widthAnchor, multiplier: 2/3),
             
-            tempLabel.topAnchor.constraint(equalTo: conditionLabel.bottomAnchor),
+            tempLabel.topAnchor.constraint(equalTo: conditionImageView.bottomAnchor,constant: 35),
             tempLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             minTempLabel.topAnchor.constraint(equalTo: tempLabel.bottomAnchor, constant: 100),
@@ -125,6 +134,9 @@ class DetailViewController: UIViewController {
             
             pressureLabel.topAnchor.constraint(equalTo: windLabel.bottomAnchor, constant: 15),
             pressureLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+            
+            condition.topAnchor.constraint(equalTo: pressureLabel.bottomAnchor, constant: 15),
+            condition.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15)
         ])
     }
     

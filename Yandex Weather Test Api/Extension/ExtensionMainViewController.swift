@@ -58,6 +58,22 @@ extension MainViewController: UISearchResultsUpdating {
 extension MainViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("The search text is: '\(searchBar.text!)'")
+        
+        guard let text = searchController.searchBar.text else {
+            return
+        }
+        network.getCoordinatesOf(city: text) { [weak self] coordinate, error in
+            
+            if let coordinate = coordinate, error == nil {
+                
+                self?.network.getDataWeather(lat: coordinate.latitude, lon: coordinate.longitude) { weather in
+                    
+                    self?.showDetailViewController(weather: weather, city: text.firstUppercased)
+                }
+                self?.searchController.searchBar.text = nil
+            } else {
+                self?.showAC()
+            }
+        }
     }
 }

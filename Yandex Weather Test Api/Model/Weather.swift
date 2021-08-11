@@ -16,6 +16,7 @@ struct Weather: Codable {
 struct Fact: Codable {
     
     let temp: Int
+    let icon: String
     let condition: String
     let windSpeed: Double
     let windDir: String
@@ -25,6 +26,7 @@ struct Fact: Codable {
     private enum CodingKeys: String, CodingKey {
         
         case temp
+        case icon
         case condition
         case windSpeed = "wind_speed"
         case windDir = "wind_dir"
