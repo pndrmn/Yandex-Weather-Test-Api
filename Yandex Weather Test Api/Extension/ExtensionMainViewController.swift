@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension MainViewController: UITableViewDataSource {
+extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -19,6 +19,7 @@ extension MainViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cityCell", for: indexPath) as! CityTableViewCell
 
         var weather = CurrentCityWeather()
@@ -35,14 +36,10 @@ extension MainViewController: UITableViewDataSource {
     }
 }
 
-extension MainViewController: UITableViewDelegate {
-    
-    
-}
-
 extension MainViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
+        
         guard let text = searchController.searchBar.text else {
             return
         }
@@ -52,8 +49,15 @@ extension MainViewController: UISearchResultsUpdating {
     func filterForSearchBar (text: String) {
         
         filteredWeatherArray = weatherArray.filter {
-            $0.city.contains(text)
+            $0.city.lowercased().contains(text.lowercased())
         }
         reloadTableView()
+    }
+}
+
+extension MainViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("The search text is: '\(searchBar.text!)'")
     }
 }

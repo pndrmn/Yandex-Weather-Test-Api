@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, DataUpdateProtocol {
     
     // MARK: - Properties
     let network = Network()
@@ -16,8 +16,8 @@ class MainViewController: UIViewController {
     var citiesArray = Cities().arrayOfCities
     var weatherArray = [CurrentCityWeather]()
     var filteredWeatherArray = [CurrentCityWeather]()
-    
-    let searchController = UISearchController(searchResultsController: nil)
+    var cityTextField: String!
+    var updatedData: CurrentCityWeather!
     
     var searchBarIsEmpty: Bool {
         guard let searchText = searchController.searchBar.text else {
@@ -31,7 +31,15 @@ class MainViewController: UIViewController {
         return searchController.isActive && !searchBarIsEmpty
     }
     
+    private lazy var searchController: UISearchController = {
+        
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.delegate = self
+        return searchController
+    }()
+    
     private lazy var tableView: UITableView = {
+        
         let tableView = UITableView(frame: .zero)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
@@ -47,6 +55,7 @@ class MainViewController: UIViewController {
         title = "Yandex Weather"
         view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addCity))
+        
         
         addNotificationCenter()
         
@@ -66,17 +75,12 @@ class MainViewController: UIViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let detailViewController = DetailViewController()
-        
         if isFiltering {
-            detailViewController.currentWeather = filteredWeatherArray[indexPath.row]
-            
-            navigationController?.pushViewController(detailViewController, animated: true)
+
+            showDetailViewController(weather: filteredWeatherArray[indexPath.row], city: filteredWeatherArray[indexPath.row].city)
         } else {
             
-            detailViewController.currentWeather = weatherArray[indexPath.row]
-            
-            navigationController?.pushViewController(detailViewController, animated: true)
+            showDetailViewController(weather: weatherArray[indexPath.row], city: weatherArray[indexPath.row].city)
         }
     }
     
@@ -97,6 +101,7 @@ class MainViewController: UIViewController {
     //MARK: - Functions
     
     private func addTableView() {
+        
         view.addSubview(tableView)
     }
     
@@ -110,7 +115,7 @@ class MainViewController: UIViewController {
         ])
     }
     
-    func fillWeatherArray() {
+    private func fillWeatherArray() {
 
         network.getWeatherFor(cities: citiesArray) { [weak self] index, weather in
             
@@ -128,17 +133,25 @@ class MainViewController: UIViewController {
         ac.addTextField { textField in
             textField.placeholder = "City"
         }
+        
         let okButton = UIAlertAction(title: "OK", style: .default) { [weak self]_ in
             
             guard let cityText = ac.textFields?[0].text?.firstUppercased else {
                 return
             }
-            if cityText.count < 2 {
-                self?.showAC()
-            } else {
-                self?.citiesArray.append(cityText)
-                self?.weatherArray.append(self!.emptyWeather)
-                self?.fillWeatherArray()
+            self?.cityTextField = cityText
+            
+            self?.network.getCoordinatesOf(city: cityText) { coordinate, error in
+                
+                if let coordinate = coordinate, error == nil {
+                    
+                    self?.network.getDataWeather(lat: coordinate.latitude, lon: coordinate.longitude) { weather in
+                        
+                        self?.showDetailViewController(weather: weather, city: cityText)
+                    }
+                } else {
+                    self?.showAC()
+                }
             }
         }
         
@@ -150,7 +163,7 @@ class MainViewController: UIViewController {
         self.present(ac, animated: true, completion: nil)
     }
     
-    func addNotificationCenter() {
+    private func addNotificationCenter() {
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -158,6 +171,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
+        
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
         let keyboardScreenEndFrame = keyboardValue.cgRectValue
@@ -172,25 +186,54 @@ class MainViewController: UIViewController {
         tableView.scrollIndicatorInsets = tableView.contentInset
     }
     
-    func showAC() {
-        let ac = UIAlertController(title: "it's empty!", message: nil, preferredStyle: .alert)
+    private func showAC() {
+        
+        let ac = UIAlertController(title: "City not found", message: nil, preferredStyle: .alert)
         let okButton = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         ac.addAction(okButton)
         self.present(ac, animated: true)
     }
     
-    func configureSearcController() {
+    private func configureSearcController() {
         
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.searchController = searchController
         definesPresentationContext = true
-        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.hidesSearchBarWhenScrolling = true
+    }
+    
+    private func showDetailViewController(weather: CurrentCityWeather, city: String!) -> Void {
+        
+        DispatchQueue.main.async {
+            
+            let detailViewController = DetailViewController()
+            
+            detailViewController.currentWeather = weather
+            detailViewController.currentWeather.city = city
+            
+            if self.citiesArray.contains(weather.city) {
+                detailViewController.isContain = true
+            }
+            
+            detailViewController.handleUpdatedDataDelegate = self
+            
+            self.navigationController?.pushViewController(detailViewController, animated: true)
+        }
     }
     
     func reloadTableView() {
+        
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
+    }
+    
+    func onDataUpdate(data: CurrentCityWeather) {
+        
+        updatedData = data
+        weatherArray.append(updatedData)
+        citiesArray.append(updatedData.city)
+        reloadTableView()
     }
 }

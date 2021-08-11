@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A41B862626C3C3D9000A9A6D /* DataUpdateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41B862526C3C3D9000A9A6D /* DataUpdateProtocol.swift */; };
 		A428D95F26C00C0200B49DEB /* ExtensionStringProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A428D95E26C00C0200B49DEB /* ExtensionStringProtocol.swift */; };
 		A4B10F5626BFAEC3009F5342 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B10F5526BFAEC3009F5342 /* AppDelegate.swift */; };
 		A4B10F5826BFAEC3009F5342 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B10F5726BFAEC3009F5342 /* SceneDelegate.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A41B862526C3C3D9000A9A6D /* DataUpdateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUpdateProtocol.swift; sourceTree = "<group>"; };
 		A428D95E26C00C0200B49DEB /* ExtensionStringProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionStringProtocol.swift; sourceTree = "<group>"; };
 		A4B10F5226BFAEC3009F5342 /* Yandex Weather Test Api.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Yandex Weather Test Api.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4B10F5526BFAEC3009F5342 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 		A41B85FF26C283D2000A9A6D /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				A41B862526C3C3D9000A9A6D /* DataUpdateProtocol.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 				A4B10F7426BFB81C009F5342 /* Cities.swift in Sources */,
 				A4B10F7E26BFBA30009F5342 /* ExtensionMainViewController.swift in Sources */,
 				A428D95F26C00C0200B49DEB /* ExtensionStringProtocol.swift in Sources */,
+				A41B862626C3C3D9000A9A6D /* DataUpdateProtocol.swift in Sources */,
 				A4B10F7826BFB873009F5342 /* Network.swift in Sources */,
 				A4B10F5826BFAEC3009F5342 /* SceneDelegate.swift in Sources */,
 				A4B10F6E26BFB77C009F5342 /* MainViewController.swift in Sources */,

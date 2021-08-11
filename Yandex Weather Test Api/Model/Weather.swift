@@ -8,11 +8,13 @@
 import Foundation
 
 struct Weather: Codable {
+    
     let fact: Fact
     let forecasts: [Forecast]
 }
 
 struct Fact: Codable {
+    
     let temp: Int
     let condition: String
     let windSpeed: Double
@@ -21,6 +23,7 @@ struct Fact: Codable {
     let daytime: String
     
     private enum CodingKeys: String, CodingKey {
+        
         case temp
         case condition
         case windSpeed = "wind_speed"
@@ -31,19 +34,23 @@ struct Fact: Codable {
 }
 
 struct Forecast: Codable {
+    
     let parts: Parts
 }
 
 struct Parts: Codable {
+    
     let day: Day
 }
 
 struct Day: Codable {
+    
     let tempMin: Int?
     let tempMax: Int?
     let daytime: String
     
     private enum CodingKeys: String, CodingKey {
+        
         case tempMin = "temp_min"
         case tempMax = "temp_max"
         case daytime

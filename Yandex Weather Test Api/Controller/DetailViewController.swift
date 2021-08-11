@@ -12,6 +12,10 @@ class DetailViewController: UIViewController {
     // MARK: - Properties
     var currentWeather: CurrentCityWeather!
     
+    var handleUpdatedDataDelegate: DataUpdateProtocol?
+    
+    var isContain = false
+    
     private lazy var cityLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -79,6 +83,10 @@ class DetailViewController: UIViewController {
         title = "Yandex Weather"
         view.backgroundColor = .white
         
+        if !isContain {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addSelectedCity))
+        }
+        
         addSubviews()
         addConstraintsToSubviews()
     }
@@ -118,5 +126,14 @@ class DetailViewController: UIViewController {
             pressureLabel.topAnchor.constraint(equalTo: windLabel.bottomAnchor, constant: 15),
             pressureLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
         ])
+    }
+    
+    @objc func addSelectedCity() {
+        
+        guard let updatedData = currentWeather else {
+            return
+        }
+        handleUpdatedDataDelegate?.onDataUpdate(data: updatedData)
+        navigationController?.popViewController(animated: true)
     }
 }

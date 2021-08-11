@@ -22,6 +22,7 @@ struct CurrentCityWeather {
     var conditionEmoji: String{
         
         switch condition {
+        
         case "clear":
             switch daytime {
             case "d":
@@ -62,31 +63,17 @@ struct CurrentCityWeather {
             default:
                 return "🌦"
             }
-        case "rain":
-            return "🌧"
-        case "moderate-rain":
-            return "🌧"
-        case "heavy-rain":
-            return "🌧"
-        case "continuous-heavy-rain":
-            return "🌧"
-        case "showers":
+        case "rain", "moderate-rain", "heavy-rain", "continuous-heavy-rain", "showers":
             return "🌧"
         case "wet-snow":
             return "🌨"
-        case "light-snow":
-            return "❄️"
-        case "snow":
-            return "❄️"
-        case "snow-showers":
+        case "light-snow", "snow", "snow-showers":
             return "❄️"
         case "hail":
             return "🌨"
         case "thunderstorm":
             return "🌩"
-        case "thunderstorm-with-rain":
-            return "⛈"
-        case "thunderstorm-with-hail":
+        case "thunderstorm-with-rain", "thunderstorm-with-hail":
             return "⛈"
         default:
             return ""
@@ -94,6 +81,7 @@ struct CurrentCityWeather {
     }
     
     init?(weather: Weather) {
+        
         temp = weather.fact.temp
         condition = weather.fact.condition
         windSpeed = weather.fact.windSpeed

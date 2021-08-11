@@ -16,19 +16,41 @@ class CityTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        disableTranslatesAutoresizingMaskIntoConstraints()
+        configureTextAlignment()
+        addSubviews ()
+        addLayoutConstraint()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    private func disableTranslatesAutoresizingMaskIntoConstraints() {
+        
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
         weatherLabel.translatesAutoresizingMaskIntoConstraints = false
         temperatureLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func configureTextAlignment() {
         
         cityLabel.textAlignment = .left
         weatherLabel.textAlignment = .right
         temperatureLabel.textAlignment = .right
+    }
+    
+    private func addSubviews() {
         
-        self.contentView.addSubview(cityLabel)
-        self.contentView.addSubview(weatherLabel)
-        self.contentView.addSubview(temperatureLabel)
+        contentView.addSubview(cityLabel)
+        contentView.addSubview(weatherLabel)
+        contentView.addSubview(temperatureLabel)
+    }
+    
+    private func addLayoutConstraint() {
         
         NSLayoutConstraint.activate([
+            
             cityLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
             cityLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant:10),
             cityLabel.widthAnchor.constraint(equalToConstant: 250),
@@ -46,14 +68,14 @@ class CityTableViewCell: UITableViewCell {
         ])
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
     func configureCell(weather: CurrentCityWeather) {
         
-        cityLabel.text = weather.city
-        weatherLabel.text = weather.conditionEmoji
-        temperatureLabel.text = "\(String(weather.temp))℃"
+        if weather.city == "" {
+            cityLabel.text = "Loading"
+        } else {
+            cityLabel.text = weather.city
+            weatherLabel.text = weather.conditionEmoji
+            temperatureLabel.text = "\(String(weather.temp))℃"
+        }
     }
 }
