@@ -10,5 +10,5 @@ import Foundation
 
 final class Cities {
     
-    var arrayOfCities = ["Male", "Berlin", "London", "Izhevsk", "Oslo", "Tokio", "Rome", "Honolulu", "Anchorage", "Los-Angeles", "Samara", "Orel", "Las-Vegas", "Vladivostok"]
+    var arrayOfCities = ["Male", "Berlin", "London", "Izhevsk", "Oslo", "Tokio", "Rome", "Honolulu", "Anchorage", "Los-Angeles"]
 }

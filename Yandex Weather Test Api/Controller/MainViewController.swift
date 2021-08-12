@@ -86,8 +86,10 @@ class MainViewController: UIViewController, DataUpdateProtocol {
         if editingStyle == .delete {
             
             if isFiltering {
+                
                 filteredWeatherArray.remove(at: indexPath.row)
             } else {
+                
                 citiesArray.remove(at: indexPath.row)
                 weatherArray.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
@@ -138,11 +140,12 @@ class MainViewController: UIViewController, DataUpdateProtocol {
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
         if notification.name == UIResponder.keyboardWillHideNotification {
+            
             tableView.contentInset = .zero
         } else {
+            
             tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
         }
-
         tableView.scrollIndicatorInsets = tableView.contentInset
     }
     
