@@ -21,7 +21,6 @@ struct Fact: Codable {
     let windSpeed: Double
     let windDir: String
     let pressureMm: Int
-    let daytime: String
     
     private enum CodingKeys: String, CodingKey {
         
@@ -31,7 +30,6 @@ struct Fact: Codable {
         case windSpeed = "wind_speed"
         case windDir = "wind_dir"
         case pressureMm = "pressure_mm"
-        case daytime
     }
 }
 
@@ -49,12 +47,10 @@ struct Day: Codable {
     
     let tempMin: Int?
     let tempMax: Int?
-    let daytime: String
     
     private enum CodingKeys: String, CodingKey {
         
         case tempMin = "temp_min"
         case tempMax = "temp_max"
-        case daytime
     }
 }

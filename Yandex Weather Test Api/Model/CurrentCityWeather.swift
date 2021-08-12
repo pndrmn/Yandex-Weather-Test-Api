@@ -18,7 +18,6 @@ struct CurrentCityWeather {
     var pressureMm: Int = 0
     var tempMin: Int = 0
     var tempMax: Int = 0
-    var daytime: String = ""
     
     init?(weather: Weather) {
         
@@ -30,7 +29,6 @@ struct CurrentCityWeather {
         pressureMm = weather.fact.pressureMm
         tempMin = weather.forecasts.first!.parts.day.tempMin!
         tempMax = weather.forecasts.first!.parts.day.tempMax!
-        daytime = weather.forecasts.first!.parts.day.daytime
     }
     
     init() {
